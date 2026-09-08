@@ -2,10 +2,26 @@ import random       # in standard Python library
 
 # User Class
 class User:
+    all_names = []
+
     def __init__(self, first_name, last_name, email):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        User.add_name_to_all(first_name, last_name)
+
+    def send_email(self, reciever, message):
+        print(f"{self.email} to {reciever}: {message}")
+
+    @classmethod
+    def add_name_to_all(cls, first, last):
+        fullname = first + " " + last
+        cls.all_names.append(fullname)
+
+    @classmethod
+    def user_exists(cls, fullname):
+        return fullname in cls.all_names
+
 
 # Teacher - child class
 class Teacher(User):
@@ -27,8 +43,9 @@ class Teacher(User):
         return self.knowledge[random.randint(0, len(self.knowledge) - 1)]
 
 # Student - child class
-    def __init__(self, first_name, last_name, email,gpa):
-        super().__init__(first_name, last_name,email)
+class Student(User):
+    def __init__(self, first_name, last_name, email, gpa):
+        super().__init__(first_name, last_name, email)
         self.gpa = gpa
         self.knowledge = []
 
@@ -37,15 +54,28 @@ class Teacher(User):
         self.knowledge.append(knowledge_string)
 
 
-
+# User List:
 sandy = Teacher("Sandy", "Smith", "sandy.smith@uni.edu")
 bob = Student("Bob", "Dylan", "bob.dylan11@uni.edu", 3.4)
 millie = Student("Millie", "Brown", "millie.brown4@uni.edu", 3.8)
 
-bob.learn(sandy.teach())
-bob.learn(sandy.teach())
-bob.learn(sandy.teach())
-print("Millie's knowledge")
-print(millie.knowledge)
-print("Bob's knowledge")
-print(bob.knowledge)
+
+
+'''
+TESTS
+'''
+# bob.learn(sandy.teach())
+# bob.learn(sandy.teach())
+# bob.learn(sandy.teach())
+# print("Millie's knowledge")
+# print(millie.knowledge)
+# print("Bob's knowledge")
+# print(bob.knowledge)
+
+# sandy.send_email("bob.dylan11@uni.edu", "class is cancelled for Monday")
+# sandy.send_email("millie.brown4@uni.edu", "class is cancelled for Monday")
+# millie.send_email("sandy.smith@uni.edu", "requesting extension for final paper")
+
+# print(User.all_names)
+print(User.user_exists("Bob Dylan"))
+print(User.user_exists("BobDylan"))
